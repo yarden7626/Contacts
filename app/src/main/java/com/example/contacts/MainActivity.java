@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,9 +15,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CardAdapter.ItemClickListener, CardAdapter.ItemLongClickListener {
 
     private static final int ADD_CONTACT_REQUEST = 1;
+    private static final int GALLERY_REQUEST_CODE = 100;
 
     int[] images = {
             R.drawable.icon1, R.drawable.icon2,
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         setUpModels();
 
         RecyclerView recyclerView = findViewById(R.id.rcView);
-        adapter = new CardAdapter(this, this, models);
+        adapter = new CardAdapter(this, this, this, models);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -78,5 +80,21 @@ public class MainActivity extends AppCompatActivity {
             RecyclerView recyclerView = findViewById(R.id.rcView);
             recyclerView.scrollToPosition(models.size() - 1);
         }
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        // Handle short click here
+        CardModel selectedContact = models.get(position);
+        Intent intent = new Intent(MainActivity.this, AddDisplayContactActivity.class);
+        intent.putExtra("contactId", position); // Pass the contact ID to display its details
+        startActivity(intent);
+    }
+
+    @Override
+    public void onItemLongClick(int position) {
+        // Handle long click here (delete contact)
+        models.remove(position);
+        adapter.notifyItemRemoved(position);
     }
 }

@@ -52,6 +52,7 @@
     <string name="select_image_from_gallery">select image from gallery</string>
     <string name="save">save</string>
     <string name="cancel">cancel</string>
+    <string name="delete" />
 
 
 </resources>
